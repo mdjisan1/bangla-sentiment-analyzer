@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>Bangla Sentiment Analyzer</title>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            margin-top: 60px;
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 60%;
+            max-width: 800px;
+            min-width: 300px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .overview {
+            background-color: #e8f0fe;
+            border-left: 6px solid #1e88e5;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #1e88e5;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            margin-top: 20px;
+            background-color: #1e88e5;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #1565c0;
+        }
+
+        .result {
+            margin-top: 30px;
+            background-color: #e3f2fd;
+            border-left: 6px solid #1e88e5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        ul {
+            list-style-type: circle;
+            margin-left: 20px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container fade-in">
+        <div class="header">
+            <h2>বাংলা সেন্টিমেন্ট বিশ্লেষক</h2>
+        </div>
+
+        <div class="overview">
+            <p><strong>প্রকল্পের সারসংক্ষেপ:</strong> এই ওয়েব অ্যাপ্লিকেশনটি একটি প্রশিক্ষিত <em>Bangla BERT</em> মডেলের মাধ্যমে বাংলা ভাষার লেখা থেকে সেন্টিমেন্ট/কন্টেন্ট টাইপ শনাক্ত করে। আপনি যখন একটি বাক্য ইনপুট করবেন, তখন এটি সেটির বিষয়ে ভবিষ্যদ্বাণী করবে যেমন "troll", "threat", "religious" ইত্যাদি এবং <em>LIME</em> এক্সপ্লেইনারের সাহায্যে দেখাবে কোন শব্দগুলো এই সিদ্ধান্তে সবচেয়ে বেশি প্রভাব ফেলেছে।</p>
+        </div>
+
+        <form method="POST">
+            <textarea name="text" placeholder="বাংলা টেক্সট লিখুন...">{{ input_text or '' }}</textarea><br>
+            <input type="submit" value="বিশ্লেষণ করুন">
+        </form>
+
+        {% if sentiment %}
+        <div class="result">
+            <h3>🔮 অনুমানকৃত লেবেল: <strong>{{ sentiment }}</strong></h3>
+            <h4>🧠 গুরুত্বপূর্ণ শব্দসমূহ:</h4>
+            <ul>
+                {% for word in explanations %}
+                    <li>{{ word }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
