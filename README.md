@@ -160,8 +160,6 @@ LIME (Local Interpretable Model-Agnostic Explanations) is used to interpret pred
 
 ## 📷 Screenshots
 
-> ⚠️ Replace placeholder images with actual screenshots.
-
 ### 1. 📊 Dataset Label Distribution
 ![Label Distribution](screenshots/Dataset%20Label%20Distribution.png)
 
