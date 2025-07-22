@@ -1,5 +1,7 @@
 from flask import Flask, request, render_template
 import re
+import os
+import gdown
 import unicodedata
 import numpy as np
 import onnxruntime as ort
@@ -8,9 +10,24 @@ from lime.lime_text import LimeTextExplainer
 
 app = Flask(__name__)
 
+MODEL_PATH = 'BanglaBERT_ONNX.onnx'
+GDRIVE_FILE_ID = '1XP9qwU9fKgwWYUEUtptMnq6_ZlTSPUE0'
+GDRIVE_URL = f'https://drive.google.com/uc?id={GDRIVE_FILE_ID}'
+
+def download_model():
+    if not os.path.exists(MODEL_PATH):
+        print("Downloading ONNX model using gdown...")
+        gdown.download(GDRIVE_URL, MODEL_PATH, quiet=False)
+        print("Download complete.")
+    else:
+        print("Model already exists.")
+
+download_model()
+
 # Model and tokenizer
 TOKENIZER_NAME = 'sagorsarker/bangla-bert-base'
 tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_NAME)
+
 MODEL_PATH = 'BanglaBERT_ONNX.onnx'
 session = ort.InferenceSession(MODEL_PATH)
 
