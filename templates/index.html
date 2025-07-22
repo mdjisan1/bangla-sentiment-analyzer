@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Bangla Sentiment Analyzer</title>
@@ -21,9 +21,10 @@
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            width: 60%;
-            max-width: 800px;
-            min-width: 300px;
+            width: 1000px;
+            max-width: 100%;
+            box-sizing: border-box; /* Include padding within width */
+            margin: 60px auto 0 auto; /* center horizontally */
         }
 
         .header {
@@ -47,10 +48,18 @@
             width: 100%;
             height: 120px;
             font-size: 16px;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ccc;
             border-radius: 8px;
             resize: vertical;
+            transition: border-color 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #1e88e5;
         }
 
         input[type="submit"] {
@@ -86,6 +95,44 @@
             animation: fadeIn 0.6s ease-in;
         }
 
+        .sample-table {
+            margin-bottom: 30px;
+        }
+
+        .sample-table h3 {
+            margin-top: 0;
+            color: #1e88e5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: #1e88e5;
+            color: white;
+        }
+
+        th {
+            padding: 14px 18px;
+            border-bottom: 1px solid #eee;
+            text-align: left; 
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -95,22 +142,56 @@
 <body>
     <div class="container fade-in">
         <div class="header">
-            <h2>বাংলা সেন্টিমেন্ট বিশ্লেষক</h2>
+            <h2>Bangla Sentiment Analyzer</h2>
         </div>
 
         <div class="overview">
-            <p><strong>প্রকল্পের সারসংক্ষেপ:</strong> এই ওয়েব অ্যাপ্লিকেশনটি একটি প্রশিক্ষিত <em>Bangla BERT</em> মডেলের মাধ্যমে বাংলা ভাষার লেখা থেকে সেন্টিমেন্ট/কন্টেন্ট টাইপ শনাক্ত করে। আপনি যখন একটি বাক্য ইনপুট করবেন, তখন এটি সেটির বিষয়ে ভবিষ্যদ্বাণী করবে যেমন "troll", "threat", "religious" ইত্যাদি এবং <em>LIME</em> এক্সপ্লেইনারের সাহায্যে দেখাবে কোন শব্দগুলো এই সিদ্ধান্তে সবচেয়ে বেশি প্রভাব ফেলেছে।</p>
+            <p><strong>🔮 Project Summary:</strong> This web application uses a trained <em>Bangla BERT</em> model to detect the sentiment/content type of written Bangla text. When you input a sentence, it will predict the nature of the content such as "troll", "threat", "religious", etc., and will also highlight the most influential words in the prediction using the <em>LIME</em> explainer.</p>
+        </div>
+
+        <div class="sample-table">
+            <h3>📋 Sample Bangla Texts with Labels</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bangla Text</th>
+                        <th>Predicted Label</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>রমজান মাসে এমনে ও নিরব থাকা দরকার। সেই সুবাধে কিছু বললাম না।</td>
+                        <td>not bully</td>
+                    </tr>
+                    <tr>
+                        <td>রাইট সরকারী চরগুলোরে লাথি মেরে বের করেন</td>
+                        <td>threat</td>
+                    </tr>
+                    <tr>
+                        <td>পাগল ছাগলে দেশটা ভরে গেছে</td>
+                        <td>troll</td>
+                    </tr>
+                    <tr>
+                        <td>নারীর সৌন্দর্য যে নগ্নতায় নয় আবরনে, তা এখান থেকেই দৃশ্যমান।</td>
+                        <td>sexual</td>
+                    </tr>
+                    <tr>
+                        <td>এবার হিন্দু বৌদ্ধ ঐক্য পরিষদের অস্তিত্ব নিয়ে টানাটানি হয় কিনা দেখেন</td>
+                        <td>religious</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <form method="POST">
-            <textarea name="text" placeholder="বাংলা টেক্সট লিখুন...">{{ input_text or '' }}</textarea><br>
-            <input type="submit" value="বিশ্লেষণ করুন">
+            <textarea name="text" placeholder="Write Bangla text here...">{{ input_text or '' }}</textarea><br>
+            <input type="submit" value="Analyze">
         </form>
 
         {% if sentiment %}
         <div class="result">
-            <h3>🔮 অনুমানকৃত লেবেল: <strong>{{ sentiment }}</strong></h3>
-            <h4>🧠 গুরুত্বপূর্ণ শব্দসমূহ:</h4>
+            <h3>🔮 Predicted Label: <strong>{{ sentiment }}</strong></h3>
+            <h4>🧠 Key Influential Words:</h4>
             <ul>
                 {% for word in explanations %}
                     <li>{{ word }}</li>
