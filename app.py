@@ -11,7 +11,7 @@ from lime.lime_text import LimeTextExplainer
 app = Flask(__name__)
 
 MODEL_PATH = 'BanglaBERT_ONNX.onnx'
-GDRIVE_FILE_ID = '1XP9qwU9fKgwWYUEUtptMnq6_ZlTSPUE0'
+GDRIVE_FILE_ID = '19SsIltlVzM_CIt1gy5CbFei5fsfRylut'
 GDRIVE_URL = f'https://drive.google.com/uc?id={GDRIVE_FILE_ID}'
 
 def download_model():
